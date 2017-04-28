@@ -7,5 +7,5 @@
 * Form @ `http://localhost:8080`
 
 # Tracking
-* `http://localhost:8080/manage/textlog
+* `http://localhost:8080/manage/textlog`
   * Other useful endpoints listed underneath `/manage`
