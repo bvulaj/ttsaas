@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecutor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +27,8 @@ public class TextToSpeechController {
 
 	@PostMapping("/tts")
 	public @ResponseBody void readText(@RequestBody(required = false) TextToSynthesize tts, HttpServletResponse response) throws IOException {
-		Runtime.getRuntime().exec("espeak " + tts.getText());
+	    CommandLine cmdLine = CommandLine.parse("espeak \"" + tts.getText() + "\"");
+        new DefaultExecutor().execute(cmdLine);
 	}
 
 	// can't figure out how to quickly support form and REST in the same method right now.  fix later.
