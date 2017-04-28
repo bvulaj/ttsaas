@@ -5,6 +5,7 @@ import java.util.Date;
 public class TextToSynthesize {
     private Date dateTime;
     private String text;
+    private String language;
 
     public Date getDateTime() {
         return dateTime;
@@ -20,5 +21,13 @@ public class TextToSynthesize {
 
     public void setText(String text) {
         this.text = text;
+	}
+
+    public String getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }

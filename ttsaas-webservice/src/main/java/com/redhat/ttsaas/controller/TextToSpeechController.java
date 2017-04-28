@@ -7,6 +7,7 @@ import java.util.Random;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +33,10 @@ public class TextToSpeechController {
 
     @PostMapping("/tts")
     public @ResponseBody void readText(@RequestBody(required = false) TextToSynthesize tts) throws IOException {
+        String language = StringUtils.defaultString(StringUtils.trimToNull(tts.getLanguage()), "en");
         StringBuffer cmd = new StringBuffer("espeak ")
                 .append('"').append(tts.getText()).append('"')
-                .append(" -v en+").append(randomGender());
+                .append(" -v ").append(language).append("+").append(randomGender());
         CommandLine cmdLine = CommandLine.parse(cmd.toString());
 
         tts.setDateTime(new Date());
