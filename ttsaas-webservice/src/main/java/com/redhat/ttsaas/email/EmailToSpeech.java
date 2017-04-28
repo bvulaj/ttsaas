@@ -1,6 +1,8 @@
 package com.redhat.ttsaas.email;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Flags;
@@ -14,14 +16,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.redhat.ttsaas.controller.TextToSpeechController;
+import com.redhat.ttsaas.SynthesizerService;
 import com.redhat.ttsaas.model.TextToSynthesize;
 
 @Component
 public class EmailToSpeech {
 
     @Autowired
-    private TextToSpeechController textToSpeechController;
+    private List<TextToSynthesize> textCache;
+
+    @Autowired
+    private SynthesizerService synthesizer;
 
     @Scheduled(fixedRate = 5000)
     public void checkForEmail() throws MessagingException {
@@ -45,8 +50,10 @@ public class EmailToSpeech {
                 }
 
                 try {
-                    textToSpeechController.readText(
-                            new TextToSynthesize(email.getSubject()));
+                    TextToSynthesize tts = new TextToSynthesize(email.getSubject());
+                    tts.setDateTime(new Date());
+                    tts.setLanguage("en");
+                    synthesizer.speak(tts);
                 } catch (MessagingException | IOException e) {
                     e.printStackTrace();
                 }
