@@ -1,6 +1,7 @@
 package com.redhat.ttsaas;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,7 +28,10 @@ public class TextToSpeechController {
 
 	@PostMapping("/tts")
 	public @ResponseBody void readText(@RequestBody(required = false) TextToSynthesize tts, HttpServletResponse response) throws IOException {
-	    CommandLine cmdLine = CommandLine.parse("espeak \"" + tts.getText() + "\"");
+	    StringBuffer cmd = new StringBuffer("espeak ")
+	            .append('"').append(tts.getText()).append('"')
+	            .append(" -v en+").append(randomGender());
+	    CommandLine cmdLine = CommandLine.parse(cmd.toString());
         new DefaultExecutor().execute(cmdLine);
 	}
 
@@ -35,5 +39,9 @@ public class TextToSpeechController {
 	@PostMapping("/ttsform")
 	public @ResponseBody void readTextForm(@ModelAttribute TextToSynthesize tts, HttpServletResponse response) throws IOException {
 		readText(tts, response);
+	}
+	
+	private String randomGender() {
+	    return new Random().nextInt(10) % 2 == 0 ? "m1" : "f1"; 
 	}
 }
