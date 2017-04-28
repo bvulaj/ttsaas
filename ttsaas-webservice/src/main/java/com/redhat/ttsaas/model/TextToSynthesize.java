@@ -7,6 +7,12 @@ public class TextToSynthesize {
     private String text;
     private String language;
 
+    public TextToSynthesize() {}
+
+    public TextToSynthesize(String text) {
+        this.text = text;
+    }
+
     public Date getDateTime() {
         return dateTime;
     }
