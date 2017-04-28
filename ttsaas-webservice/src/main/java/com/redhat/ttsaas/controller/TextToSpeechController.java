@@ -40,6 +40,7 @@ public class TextToSpeechController {
         CommandLine cmdLine = CommandLine.parse(cmd.toString());
 
         tts.setDateTime(new Date());
+        tts.setLanguage(language);
         textCache.add(tts);
 
         new DefaultExecutor().execute(cmdLine);
