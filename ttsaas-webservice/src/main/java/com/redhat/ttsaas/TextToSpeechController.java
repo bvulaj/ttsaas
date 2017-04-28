@@ -27,6 +27,8 @@ public class TextToSpeechController {
 		// do the tts
 		byte[] speechBytes = tts.getText().getBytes();
 
+        Runtime.getRuntime().exec("espeak " + tts.getText());
+
 		response.getOutputStream().write(speechBytes);
 	}
 }
