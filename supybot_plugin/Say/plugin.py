@@ -33,6 +33,8 @@ from supybot.commands import *
 import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
+import requests
+import traceback
 
 
 class Say(callbacks.Plugin):
@@ -40,6 +42,25 @@ class Say(callbacks.Plugin):
     This should describe *how* to use this plugin."""
     threaded = True
 
+    def __init__(self, irc):
+        self.__parent = super(Say, self)
+        self.__parent.__init__(irc)
+
+    def say(self, irc, msg, args, text):
+        """<text>
+
+        Says <text> outloud
+        """
+        try:
+            r = requests.post('http://10.10.124.91:8080/tts', data='{"text":"%s"}' % text, headers={"content-type" : "application/json"})
+            if r.status_code == requests.codes.ok:
+                irc.reply("Word.")
+            else:
+                irc.reply("I tried, but something went wrong, contact plugin developer. HTTP status code: " + str(r.status_code))
+        except:
+            irc.reply("I tried, but something went wrong, contact plugin developer")
+            traceback.print_exc()
+    say = wrap(say, ['text'])
 
 Class = Say
 
