@@ -1,2 +1,2 @@
 # ttsaas
-Test to speech as a service
+Text to speech as a service
