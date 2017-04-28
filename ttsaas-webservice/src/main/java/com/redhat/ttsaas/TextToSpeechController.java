@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.redhat.ttsaas.model.TextToSynthesize;
@@ -23,12 +24,13 @@ public class TextToSpeechController {
 	}
 
 	@PostMapping("/tts")
-	public @ResponseBody void readText(@ModelAttribute TextToSynthesize tts, HttpServletResponse response) throws IOException {
-		// do the tts
-		byte[] speechBytes = tts.getText().getBytes();
+	public @ResponseBody void readText(@RequestBody(required = false) TextToSynthesize tts, HttpServletResponse response) throws IOException {
+		Runtime.getRuntime().exec("espeak " + tts.getText());
+	}
 
-        Runtime.getRuntime().exec("espeak " + tts.getText());
-
-		response.getOutputStream().write(speechBytes);
+	// can't figure out how to quickly support form and REST in the same method right now.  fix later.
+	@PostMapping("/ttsform")
+	public @ResponseBody void readTextForm(@ModelAttribute TextToSynthesize tts, HttpServletResponse response) throws IOException {
+		readText(tts, response);
 	}
 }
